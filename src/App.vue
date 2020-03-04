@@ -59,14 +59,15 @@ export default {
       this.$router.push("/contract");
     },
     goToMap(){
-      this.$router.push("/Map");
+      this.$router.push("/map");
     },
     goToAd(){
       this.$router.push("/advertisement");
     },
     goToAccount(){
-      this.$router.push("/Login");
+      this.$router.push("/myInfo");
     },
   }
 };
 </script>
+
