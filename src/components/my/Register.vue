@@ -4,21 +4,31 @@
     <br>
     <div class="v-card v-card--raised v-sheet theme--light">
         <v-card-text>
+            <p class="text-center" style="font-size:2em">회원가입</p><br>
             <v-form ref="form" v-model="valid" lazy-validation="lazy-validation">
                 <v-text-field
                     v-model="email"
                     :rules="emailRules"
-                    label="E-mail"
+                    label="이메일"
+                    outlined
+                    dense
                     required="required"></v-text-field>
 
                 <v-text-field
                     v-model="name"
                     :counter="10"
                     :rules="nameRules"
-                    label="성명"
+                    outlined
+                    dense
+                    label="이름"
                     required="required"></v-text-field>
 
-                <v-text-field v-model="phone" v-mask="mask" label="전화번호"></v-text-field>
+                <v-text-field 
+                    v-model="phone" 
+                    v-mask="mask" 
+                    outlined
+                    dense
+                    label="전화번호"></v-text-field>
 
                 <v-text-field
                     v-model="password"
@@ -26,15 +36,18 @@
                     :rules="[rules.required, rules.min]"
                     :type="show ? 'text' : 'password'"
                     name="input-10-2"
-                    label="Password"
+                    label="비밀번호"
                     hint="문자+숫자+특수문자"
                     class="input-group--focused"
+                    outlined
+                    dense
                     @click:append="show = !show"></v-text-field>
 
                 <br>
-                <v-btn :disabled="!valid" color="success" class="mr-4" @click="submit">
+                <v-btn block :disabled="!valid" color="primary" class="mr-4" @click="submit">
                     가입
                 </v-btn>
+                <br>
 
             </v-form>
         </v-card-text>
@@ -42,6 +55,7 @@
   </div>
 </template>
 <script>
+    import axios from 'axios';
     import {mask} from 'vue-the-mask'
 
     export default {
@@ -75,7 +89,7 @@
                     this.snackbar = true
                 }
                 return new Promise((resolve, reject) => {
-                  this.$http.post('/register', 
+                  axios.post('/register', 
                       {
                           name: this.name,
                           phone: this.phone,
@@ -108,3 +122,4 @@
         }
     }
 </script>
+

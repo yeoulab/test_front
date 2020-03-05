@@ -1,6 +1,5 @@
 <template>
     <div class="row">
-        <p v-if="getLoginFlag==true">{{ this.$store.state.customer.name }} 님 반갑습니다.</p>
         <div class="col-md-4 col-12" v-if="getLoginFlag==false">
             <div class="v-card v-card--outlined v-sheet theme--light">
                 <a href="#/login" tabindex="0" class="v-list-item--doc v-list-item v-list-item--link theme--light primary--text">
@@ -26,14 +25,14 @@
                     </div>
                     <div class="v-list-item__content">
                         <div class="v-list-item__title">
-                            <span>로그아웃</span>
+                            <span>{{ this.$store.state.customer.name }}님 반갑습니다.</span>
                         </div>
                     </div><!---->
                     <div class="v-list-item__action">
                         <i aria-hidden="true" class="v-icon notranslate mdi mdi-arrow-right theme--light"></i>
                     </div>
                 </a>
-            </div>            
+            </div>
         </div>
     </div>
 </template>
@@ -76,3 +75,4 @@ export default {
     }
 }
 </script>
+
