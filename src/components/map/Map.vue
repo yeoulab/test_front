@@ -1,88 +1,101 @@
 <template>
   <div>
-    <naver-maps
-      :height="height"
-      :width="width"
-      :mapOptions="mapOptions"
-      :initLayers="initLayers"
-      @load="onLoad">
-      <!--
-      <naver-info-window
-        class="info-window"
-        @load="onWindowLoad"
-        :isOpen="info"
-        :marker="marker">
-        <div class="info-window-container">
-          <h1>{{hello}}</h1>
-        </div>
-      </naver-info-window>
-      <naver-marker :lat="37" :lng="127" @click="onMarkerClicked" @load="onMarkerLoaded"/>
-      <naver-circle :lat="37" :lng="127" :radius="88600"/>
-      <naver-rectangle :south="36" :north="38" :west="126" :east="128"/>
-      <naver-ellipse :bounds="{south:36,north:38,west:126,east:128}"/>
-      <naver-polygon :paths="[[{lat:37,lng:127},{lat:38,lng:127},{lat:38,lng:129},{lat:37,lng:128}]]"/>
-      <naver-polyline :path="[{lat:37,lng:127},{lat:38,lng:129}]"/>
-      <naver-ground-overlay
-        :url="'//logoproject.naver.com/img/img_about.gif'"
-        :bounds="{south:36.7,north:36.9,west:126.5,east:127.5}"/>
-      -->
-    </naver-maps>
+    <div id="map" style="width:300px;height:300px;"></div>
   </div>
 </template>
-
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=k0ch2lsnrj"></script>
 <script>
   export default {
-    name: 'HelloWorld',
+    name: 'Map',
     data() {
       return {
-        width: 800,
-        height: 800,
-        info: false,
-        marker: null,
-        count: 1,
         map: null,
-        isCTT: false,
-        mapOptions: {
-          lat: 37,
-          lng: 127,
-          zoom: 10,
-          zoomControl: true,
-          zoomControlOptions: {position: 'TOP_RIGHT'},
-          mapTypeControl: true,
+        markers: [],
+        htmlMarker1: {
+          content: '<div style="cursor:pointer;width:25px;height:25px;line-height:26px;font-size:10px;border-radius:50%;color:white;text-align:center;font-weight:bold;background:rgba(255, 149, 79, 0.75);background-size:contain;"></div>',
+          size: N.Size(40, 40),
+          anchor: N.Point(20, 20)
         },
-        initLayers: ['BACKGROUND', 'BACKGROUND_DETAIL', 'POI_KOREAN']
-      }
-    },
-    computed: {
-      hello() {
-        return `Hello, World! × ${this.count}`;
-      }
-    },
-    methods: {
-      onLoad(vue)
-      {
-        this.map = vue;
-      },
-      onWindowLoad(that) {
-          console.log(that)
-      },
-      onMarkerClicked(event) {
-        this.info = !this.info;
-        console.log(event)
-      },
-      onMarkerLoaded(vue) {
-        this.marker = vue.marker;
+        htmlMarker2: {
+            content: '<div style="cursor:pointer;width:30px;height:30px;line-height:31px;font-size:10px;border-radius:50%;color:white;text-align:center;font-weight:bold;background:rgba(255, 149, 79, 0.75);background-size:contain;"></div>',
+            size: N.Size(40, 40),
+            anchor: N.Point(20, 20)
+        },
+        htmlMarker3: {
+            content: '<div style="cursor:pointer;width:35px;height:35px;line-height:36px;font-size:10px;border-radius:50%;color:white;text-align:center;font-weight:bold;background:rgba(255, 149, 79, 0.75);background-size:contain;"></div>',
+            size: N.Size(40, 40),
+            anchor: N.Point(20, 20)
+        },
+        htmlMarker4: {
+            content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(../../img/cluster-marker-4.png);background-size:contain;"></div>',
+            size: N.Size(40, 40),
+            anchor: N.Point(20, 20)
+        },
+        htmlMarker5: {
+            content: '<div style="cursor:pointer;width:40px;height:40px;line-height:42px;font-size:10px;color:white;text-align:center;font-weight:bold;background:url(../../img/cluster-marker-5.png);background-size:contain;"></div>',
+            size: N.Size(40, 40),
+            anchor: N.Point(20, 20)
+        },
       }
     },
     mounted() {
-      setInterval(() => this.count++, 1000);
+      if (window.naver) {
+        console.log("window.naver == true")
+        this.map = new window.naver.maps.Map('map',{
+            center: new naver.maps.LatLng(37.3595704, 127.105399), //지도의 초기 중심 좌표
+            zoom: 14, //지도의 초기 줌 레벨
+            //minZoom: 7, //지도의 최소 줌 레벨
+            zoomControl: true, //줌 컨트롤의 표시 여부
+            zoomControlOptions: { //줌 컨트롤의 옵션
+                position: naver.maps.Position.TOP_RIGHT,
+                style: naver.maps.ZoomControlStyle.SMALL
+            }
+        });
+
+        //setOptions 메서드를 이용해 옵션을 조정할 수도 있습니다.
+        // this.map.setOptions("mapTypeControl", true); //지도 유형 컨트롤의 표시 여부
+
+        naver.maps.Event.addListener(this.map, 'zoom_changed', function (zoom) {
+            console.log('zoom:' + zoom);
+        });
+
+        // marker test
+        var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(37.3595704, 127.105399),
+                    draggable: true
+        });
+        this.markers.push(marker)
+
+        var marker2 = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(37.3578575, 127.1063746),
+                    draggable: true
+        });
+        this.markers.push(marker2)
+
+        var marker3 = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(36.3578575, 127.105399),
+                    draggable: true
+        });
+        this.markers.push(marker3)
+
+        var markerClustering = new MarkerClustering({
+                minClusterSize: 2, //default
+                maxZoom: 12,
+                map: this.map,
+                markers: this.markers,
+                disableClickZoom: false,
+                gridSize: 100,
+                icons: [this.htmlMarker1, this.htmlMarker2, this.htmlMarker3],
+                indexGenerator: [100, 500, 1000],
+                stylingFunction: function(clusterMarker, count) {
+                    $(clusterMarker.getElement()).find('div:first-child').text(count);
+                }
+            });        
+
+      } 
+      else{
+        console.log("####")
+      } 
     }
   }
 </script>
-<style scoped>
-  .info-window-container {
-    padding: 10px;
-    width: 300px;
-    height: 100px;
-  }
-</style>

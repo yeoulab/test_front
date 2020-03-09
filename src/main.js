@@ -5,6 +5,7 @@ import vuetify from './plugins/vuetify';
 import router from './routes/vue-router'
 import axios from 'axios'
 import { store } from './store/vuex'
+/*import naver from 'vue-naver-maps'*/
 
 Vue.config.productionTip = false
 
@@ -14,6 +15,12 @@ axios.defaults.withCredentials = true;
 
 /* vuex 설치 */
 /* vue-the-mask 설치 */
+/*
+Vue.use(naver, {
+  clientID: 'k0ch2lsnrj',
+  useGovAPI: false, //공공 클라우드 API 사용 (선택)
+  subModules:'' // 서브모듈 (선택)
+});*/
 
 new Vue({
   vuetify,
