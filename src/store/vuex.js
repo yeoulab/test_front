@@ -13,6 +13,7 @@ export const store = new Vuex.Store({
       },
       loginFlag: false,
       count: 0,
+      pageName: '',
     },
     mutations: {
       setCustomer: function(state, payload){        
@@ -34,6 +35,10 @@ export const store = new Vuex.Store({
       },
       increment (state, value) {
         state.count += value
+      },
+      setPageName(state, payload){
+        state.pageName = payload.pageName
       }
     }
   })
+

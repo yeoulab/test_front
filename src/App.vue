@@ -1,43 +1,50 @@
 <template>
-  <v-app>
-    <v-content>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
-    </v-content>  
-    <v-footer app>
-      <v-bottom-navigation app grow
-        :value="activeBtn"
-        color="deep-purple accent-4"
-      >
-        <v-btn  @click="goToHome">
-          <v-icon>mdi-home-variant-outline</v-icon>
-        </v-btn>
+<div>  
+    <v-app>
+      <TopBar></TopBar>
+      <v-content>
+        <v-container fluid>
+          <router-view></router-view>
+        </v-container>
+      </v-content>    
+      <v-footer app>      
+        <v-bottom-navigation app grow
+          :value="activeBtn"
+          color="blue accent-4"
+        >
+          <v-btn  @click="goToHome">
+            <v-icon>mdi-home-variant-outline</v-icon>
+          </v-btn>
 
-        <v-btn  @click="goToContract">
-          <v-icon>mdi-file-document-edit</v-icon>
-        </v-btn>
+          <v-btn  @click="goToContract">
+            <v-icon>mdi-file-document-edit</v-icon>
+          </v-btn>
 
-        <v-btn @click="goToMap">
-          <v-icon>mdi-map-marker</v-icon>
-        </v-btn>
+          <v-btn @click="goToMap">
+            <v-icon>mdi-map-marker</v-icon>
+          </v-btn>
 
-        <v-btn @click="goToAd">
-          <v-icon>mdi-television-classic</v-icon>
-        </v-btn>
+          <v-btn @click="goToAd">
+            <v-icon>mdi-television-classic</v-icon>
+          </v-btn>
 
-        <v-btn  @click="goToAccount">
-          <v-icon>mdi-account</v-icon>
-        </v-btn>        
-      </v-bottom-navigation>      
-    </v-footer>
-  </v-app>
+          <v-btn  @click="goToAccount">
+            <v-icon>mdi-account</v-icon>
+          </v-btn>        
+        </v-bottom-navigation>      
+      </v-footer>
+    </v-app>
+  </div>
 </template>
 
 <script>
+import TopBar from './components/common/TopBar.vue'
 
 export default {
   name: 'App',
+  components:{
+    TopBar,
+  },
   data () {
       return {
         activeBtn: 1, 
@@ -70,4 +77,9 @@ export default {
   }
 };
 </script>
+<style>
+v-content{
+  padding-top: 50px
+}
+</style>
 
