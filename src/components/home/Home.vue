@@ -1,13 +1,15 @@
 <template>
-  <v-container app>
-    <v-card>
-        <v-row align="center" justify="space-around" v-for="a in items" v-bind:key="a.id">
-            <v-icon large color="green darken-2" @click="movePage(a.btnName[0])">{{ a.btnName[0] }}</v-icon>
-            <v-icon large color="green darken-2" @click="movePage(a.id)">{{ a.btnName[1] }}</v-icon>
-            <v-icon large color="green darken-2" @click="movePage(a.id)">{{ a.btnName[2] }}</v-icon>
-        </v-row>
-    </v-card>
-  </v-container>
+    <div class="home">
+        <v-container>
+            <v-card>
+                <v-row align="center" justify="space-around" v-for="a in items" v-bind:key="a.id">
+                    <v-icon large color="indigo darken-2" @click="movePage(a.btnName[0])">{{ a.btnName[0] }}</v-icon>
+                    <v-icon large color="indigo darken-2" @click="movePage(a.id)">{{ a.btnName[1] }}</v-icon>
+                    <v-icon large color="indigo darken-2" @click="movePage(a.id)">{{ a.btnName[2] }}</v-icon>
+                </v-row>
+            </v-card>
+        </v-container>
+    </div>
 </template>
 <script>
 export default{
@@ -31,6 +33,7 @@ export default{
         this.$store.commit('setPageName',{
                           pageName: '홈'
                         })
+      console.log(this.$vuetify.breakpoint)
     }
 }
 </script>
@@ -44,4 +47,5 @@ export default{
     padding-bottom: 5px;
 }
 </style>
+
 

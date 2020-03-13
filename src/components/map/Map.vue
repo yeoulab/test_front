@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <div id="map" style="width:300px;height:300px;"></div>
+  <div class="map">
+    <v-container>
+      <div id="map" style="width:100%;height:500px;"></div>
+    </v-container>
   </div>
 </template>
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=k0ch2lsnrj"></script>
@@ -39,6 +41,7 @@
       }
     },
     mounted() {
+      this.$store.commit('setPageName',{pageName: '지도'})
       if (window.naver) {
         console.log("window.naver == true")
         this.map = new window.naver.maps.Map('map',{
@@ -95,7 +98,8 @@
       } 
       else{
         console.log("####")
-      } 
+      }            
     }
   }
 </script>
+
