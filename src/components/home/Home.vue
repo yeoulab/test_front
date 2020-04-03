@@ -1,32 +1,57 @@
 <template>
     <div class="home">
         <v-container>
-            <v-card>
-                <v-row align="center" justify="space-around" v-for="a in items" v-bind:key="a.id">
-                    <v-icon large color="indigo darken-2" @click="movePage(a.btnName[0])">{{ a.btnName[0] }}</v-icon>
-                    <v-icon large color="indigo darken-2" @click="movePage(a.id)">{{ a.btnName[1] }}</v-icon>
-                    <v-icon large color="indigo darken-2" @click="movePage(a.id)">{{ a.btnName[2] }}</v-icon>
-                </v-row>
-            </v-card>
+            <v-text-field label="item code" outlined v-model="item_code"></v-text-field>
+            <v-text-field label="start date" outlined v-model="start_date"></v-text-field>
+            <v-text-field label="last date" outlined></v-text-field>
+            <v-btn small @click=getInfo>result</v-btn>
+
+            <v-simple-table>
+                <template v-slot:default>
+                <thead>
+                    <tr>
+                    <th class="text-left">Subject</th>
+                    <th class="text-left">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="info in data.datas" :key="info.name">
+                    <td>{{ info.subject }}</td>
+                    <td>{{ info.value }}</td>
+                    </tr>
+                </tbody>
+                </template>
+            </v-simple-table>            
+            {{ data.datas.sum_frgn_unit_price }}
         </v-container>
     </div>
 </template>
 <script>
+import axios from 'axios'
+
 export default{
     data() {
         return{
-            items: [
-                {row:'1', btnName: ['mdi-domain', 'mdi-message-text', 'mdi-dialpad']},
-                {row:'2', btnName: ['mdi-domain', 'mdi-message-text', 'mdi-dialpad']},
-                {row:'3', btnName: ['mdi-domain', 'mdi-message-text', 'mdi-dialpad']},
-                {row:'4', btnName: ['mdi-domain', 'mdi-message-text', 'mdi-dialpad']},
-            ]
+            data: {
+                datas: []
+            },
+            item_code: '',
+            start_date: '',
         }
     },
     methods: {
-        movePage(a){
-            alert("a : " + a)
-            // 버튼명에 따른 분기처리
+        getInfo(){
+            const baseUrl = "http://127.0.0.1:5000"
+            axios.get(`${baseUrl}/unitPrice`,{
+                params: {
+                    item_code: this.item_code,
+                    start_date: this.start_date,
+                }
+            })
+            .then((result) =>{
+                console.log(result.data.result)
+                this.data.datas = result.data.result
+            })
         }
     },
     mounted() {
@@ -47,5 +72,4 @@ export default{
     padding-bottom: 5px;
 }
 </style>
-
 
