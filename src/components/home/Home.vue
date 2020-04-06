@@ -3,26 +3,36 @@
         <v-container>
             <v-text-field label="item code" outlined v-model="item_code"></v-text-field>
             <v-text-field label="start date" outlined v-model="start_date"></v-text-field>
-            <v-text-field label="last date" outlined></v-text-field>
-            <v-btn small @click=getInfo>result</v-btn>
-
-            <v-simple-table>
-                <template v-slot:default>
-                <thead>
-                    <tr>
-                    <th class="text-left">Subject</th>
-                    <th class="text-left">Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="info in data.datas" :key="info.name">
-                    <td>{{ info.subject }}</td>
-                    <td>{{ info.value }}</td>
-                    </tr>
-                </tbody>
-                </template>
-            </v-simple-table>            
-            {{ data.datas.sum_frgn_unit_price }}
+            <v-text-field label="last date" outlined v-model="end_date"></v-text-field>
+            <v-row class="mb-4">
+                <v-col>
+                    <v-btn small @click=getInfo>result</v-btn>
+                </v-col>
+                <v-col>
+                    <v-btn small @click=getCompInfo>기업정보</v-btn>
+                </v-col>
+            </v-row>
+            <br>
+            <div v-if="search_yn">
+                <v-simple-table>
+                    <template v-slot:default>
+                    <thead>
+                        <tr>
+                            <th class="text-center">Subject</th>
+                            <th class="text-center">Value</th>
+                            <th class="text-center">직전값</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="info in data.datas" :key="info.name">
+                            <td class="text-center">{{ info.subject }}</td>
+                            <td class="text-right">{{ info.value }}</td>
+                            <td class="text-right">{{ info.pre_value }}</td>
+                        </tr>
+                    </tbody>
+                    </template>
+                </v-simple-table>            
+            </div>
         </v-container>
     </div>
 </template>
@@ -33,10 +43,14 @@ export default{
     data() {
         return{
             data: {
-                datas: []
+                datas: [],
+                pre_datas: [],
             },
             item_code: '',
             start_date: '',
+            end_date: '',
+            link: 'https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=',
+            search_yn: false,
         }
     },
     methods: {
@@ -46,12 +60,28 @@ export default{
                 params: {
                     item_code: this.item_code,
                     start_date: this.start_date,
+                    end_date: this.end_date,
                 }
             })
             .then((result) =>{
                 console.log(result.data.result)
+                this.search_yn = true
+                this.data.pre_datas = this.data.datas
+                
+
                 this.data.datas = result.data.result
+                console.log("@@@ : " + this.data.datas.length)
+                for( var i = 0 ; i < this.data.datas.length ; i++ ){
+                    this.data.datas[i].pre_value = this.data.pre_datas[i].value
+                }
+
+                console.log(this.data.datas[0])                
+
+                this.link = this.link + this.item_code
             })
+        },
+        getCompInfo(){
+            window.open(this.link ,"");
         }
     },
     mounted() {
