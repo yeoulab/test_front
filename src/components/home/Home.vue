@@ -48,6 +48,7 @@
                 </v-col>
             </v-row>
             <div v-if="code_search_yn">
+                <!--
                 <v-data-table
                     dense
                     :headers="headers"
@@ -55,7 +56,7 @@
                     hide-default-footer
                     item-key="subject">
                 </v-data-table>
-                <!--
+                -->
                 <v-simple-table dense>
                     <template v-slot:default>
                         <thead>
@@ -71,18 +72,18 @@
                             </tr>
                         </tbody>
                     </template>
-                </v-simple-table>-->
+                </v-simple-table>
             </div>            
             <br>
             <div v-if="search_yn">
+                <!--
                 <v-data-table
                     dense
                     :headers="headers2"
                     :items="data.datas"
                     hide-default-footer
                     item-key="subject">
-                </v-data-table>
-                <!--
+                </v-data-table> -->
                 <v-simple-table dense>
                     <template v-slot:default>
                     <thead>
@@ -101,7 +102,6 @@
                     </tbody>
                     </template>
                 </v-simple-table>
-                -->
             </div>
         </v-container>
     </div>
@@ -117,6 +117,7 @@ export default{
             start_date: '',
             end_date: '',
             baseUrl:  "http://34.64.244.176:8090",
+            //baseUrl:  "http://127.0.0.1:8090",
             baseLink: 'https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=',
             link: '',
             headers: [
