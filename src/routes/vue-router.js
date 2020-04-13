@@ -6,6 +6,7 @@ import Router from 'vue-router'
 //import MapNav from '../components/map/Map'
 import Home from '../components/home/Home'
 import Index from '../components/home/Index'
+import Diary from '../components/home/Diary'
 
 //import MyInfo from '../components/my/MyInfo'
 //import Login from '../components/my/Login'
@@ -27,6 +28,9 @@ export default new Router({
             }, {
                 path: 'index',
                 component: Index,
+            }, {
+                path: 'diary',
+                component: Diary,
             }]
         },
         {path: '/', component: Door},
@@ -37,5 +41,6 @@ export default new Router({
         //{path: '/myInfo', component: MyInfo},
         //{path: '/login', component: Login},
         //{path: '/register', component: Register},
+        
     ]
 })

@@ -9,7 +9,9 @@ import { store } from './store/vuex'
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://127.0.0.1:8070';
+//axios.defaults.baseURL = 'http://127.0.0.1:8070'; // java
+//axios.defaults.baseURL = 'http://127.0.0.1:8090'; // local-python
+axios.defaults.baseURL = 'http://34.64.244.176:8070'; // server-python
 axios.defaults.crossDomain = true;
 axios.defaults.withCredentials = true;
 
