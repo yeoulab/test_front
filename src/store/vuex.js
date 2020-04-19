@@ -14,6 +14,11 @@ export const store = new Vuex.Store({
       loginFlag: false,
       count: 0,
       pageName: '',
+      stockInfo: {
+        item_name: '',
+        item_code: '',
+        start_date: '',
+      }
     },
     mutations: {
       setCustomer: function(state, payload){        
@@ -23,6 +28,12 @@ export const store = new Vuex.Store({
         state.customer.phone = payload.phone
         state.customer.name = payload.name
       },
+      setStockInfo: function(state, payload){        
+        console.log("setCustomer mutation : " + payload.item_name)
+        state.stockInfo.item_name = payload.item_name
+        state.stockInfo.item_code = payload.item_code
+        state.stockInfo.start_date = payload.start_date
+      },      
       login(state){
           state.loginFlag = true;
       },

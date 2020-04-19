@@ -50,6 +50,8 @@
                 <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" 
+                    @click="go_to_first(data)">첫화면</v-btn>
+                <v-btn color="blue darken-1" 
                     @click="update_diary(data)">Save</v-btn>
                 </v-card-actions>
             </v-card>                     
@@ -81,12 +83,20 @@
                             console.log(res)
                         }
                     })
+            },
+            go_to_first(data){
+                this.$store.commit('setStockInfo',{
+                    item_code: data.jongmok_code,
+                    item_name: data.company_name,
+                    start_date: data.start_date,
+                })            
+                this.$router.push("/main/home");    
             }
         },
         mounted() {
-        this.$store.commit('setPageName',{
-                          pageName: '드아이어리'
-                        })
+            this.$store.commit('setPageName',{
+                            pageName: '드아이어리'
+                            })            
         }
     }
 </script>

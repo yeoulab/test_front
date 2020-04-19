@@ -255,7 +255,15 @@ export default{
     mounted() {
         this.$store.commit('setPageName',{
                           pageName: '홈'
-                        })
+                        }),
+        console.log(this.$store.state.stockInfo)
+        this.item_code = this.$store.state.stockInfo.item_code
+        this.item_name = this.$store.state.stockInfo.item_name
+        this.start_date = this.$store.state.stockInfo.start_date
+
+        if( this.item_code != "" ){
+            this.getInfo()
+        }                                
     }
 }
 </script>
