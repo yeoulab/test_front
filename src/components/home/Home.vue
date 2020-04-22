@@ -262,6 +262,7 @@ export default{
         this.start_date = this.$store.state.stockInfo.start_date
 
         if( this.item_code != "" ){
+            this.item_change()
             this.getInfo()
         }                                
     }

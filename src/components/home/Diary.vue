@@ -96,7 +96,8 @@
         mounted() {
             this.$store.commit('setPageName',{
                             pageName: '드아이어리'
-                            })            
+                            })
+            this.get_diary()    
         }
     }
 </script>
