@@ -34,6 +34,7 @@ export default {
           {btnName: 'mdi-home-variant-outline', text: '종목정보', route: '/main/home'},
           {btnName: 'mdi-chart-bell-curve-cumulative', text: '지수정보', route: '/main/index'},
           {btnName: 'mdi-file-document-edit', text: '다이어리', route: '/main/diary'},
+          {btnName: 'mdi-clipboard-list-outline', text: '다이어리'},
           //{btnName: 'mdi-account', text: '', route: '/myInfo'},
         ]
       }

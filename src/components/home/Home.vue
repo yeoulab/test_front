@@ -140,6 +140,37 @@
                     </tbody>
                     </template>
                 </v-simple-table>
+                <br>
+                <v-simple-table dense>
+                    <template v-slot:default>
+                    <thead>
+                        <tr>
+                            <th class="text-center">Date</th>
+                            <th class="text-center">외인</th>
+                            <th class="text-center">기관</th>
+                            <th class="text-center">개인</th>
+                            <th class="text-center">평균거래</th>
+                            <th class="text-center">외인(종가)</th>
+                            <th class="text-center">기관(종가)</th>
+                            <th class="text-center">개인(종가)</th>
+                            <th class="text-center">거래(종가)</th>
+                            <th class="text-center">비율(종가)</th>
+                            <th class="text-center">외인(평균)</th>
+                            <th class="text-center">기관(평균)</th>
+                            <th class="text-center">개인(평균)</th>
+                            <th class="text-center">거래(평균)</th>
+                            <th class="text-center">비율(평균)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(info, i) in data.transition" :key="i">
+                            <td v-for="(val, j) in info" :key="j">
+                                {{ info[j] }}
+                            </td>
+                        </tr>
+                    </tbody>
+                    </template>
+                </v-simple-table>
             </div>
         </v-container>
     </div>
@@ -173,6 +204,7 @@ export default{
                 pre_datas: [],
                 max_info: {},
                 company_detail_info: {},
+                transition: [],
             },
         }
     },
@@ -191,15 +223,14 @@ export default{
                 this.data.pre_datas = this.data.datas
                 this.data.max_info = result.data.max_info
                 this.data.company_detail_info = result.data.company_detail_info
-                console.log("$$$ : " + this.data.max_info)
-                console.log("max_tr_quant : " + this.data.max_info.max_tr_quant)
-                console.log("%%% : " + this.data.company_detail_info)
                 
 
                 this.data.datas = result.data.result
                 for( var i = 0 ; i < this.data.datas.length ; i++ ){
                     this.data.datas[i].pre_value = this.data.pre_datas[i].value
                 }
+                this.data.transition = result.data.transition
+                console.log(this.data.transition[0][1])
             })
         },
         getCompInfo(){

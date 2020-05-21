@@ -1,8 +1,10 @@
 <template>
     <v-container>
+        <!--
         <v-btn icon small @click="get_diary">
             <v-icon>mdi-owl</v-icon>
         </v-btn>
+        -->
         <v-dialog width="500" v-for="data in datas" v-bind:key=data.jongmok_code>
             <template v-slot:activator="{ on }">
                 <v-card v-on="on">

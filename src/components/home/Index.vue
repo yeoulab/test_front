@@ -1,8 +1,10 @@
 <template>
     <v-container>
+        <!--
         <v-btn icon small @click="getGlobalIndex">
             <v-icon>mdi-owl</v-icon>
         </v-btn>
+        -->
         <v-simple-table dense v-if="this.datas">
             <template v-slot:default>
             <thead>
