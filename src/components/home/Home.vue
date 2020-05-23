@@ -223,14 +223,12 @@ export default{
                 this.data.pre_datas = this.data.datas
                 this.data.max_info = result.data.max_info
                 this.data.company_detail_info = result.data.company_detail_info
-                
-
                 this.data.datas = result.data.result
+                this.data.transition = result.data.transition
                 for( var i = 0 ; i < this.data.datas.length ; i++ ){
                     this.data.datas[i].pre_value = this.data.pre_datas[i].value
                 }
-                this.data.transition = result.data.transition
-                console.log(this.data.transition[0][1])
+                
             })
         },
         getCompInfo(){
