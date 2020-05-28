@@ -20,7 +20,18 @@
                         @change="item_change">
                     </v-text-field>
                 </v-col>
+                <v-col>
+                    <v-text-field 
+                        label="start date" 
+                        outlined 
+                        dense
+                        v-model="start_date"
+                        v-on:keyup.enter="getInfo">
+                    </v-text-field>
+                </v-col>
             </v-row>
+            <!-- 2020-05-23
+                 last date 의 미사용으로 주석처리
             <v-row style="height: 50px;"
             >
                 <v-col>
@@ -40,6 +51,7 @@
                     </v-text-field>
                 </v-col>
             </v-row>            
+            -->
             <v-row class="mb-1">
                 <v-col xs4 sm4 md3>
                     <v-btn small color="success" @click="getInfo">Call Api</v-btn>
@@ -50,7 +62,30 @@
                 <v-col xs4 sm4 md3>
                     <v-btn small @click="insert_diary">Save Diary</v-btn>
                 </v-col>
+                <div v-if="search_yn">
+                    <v-col xs4 sm4 md3>
+                        <v-btn small @click="get_score">Get Score</v-btn>
+                    </v-col>
+                </div>
             </v-row>
+            <v-simple-table dense>
+                <template v-slot:default>
+                <thead>
+                    <tr>
+                        <th class="text-center">주제</th>
+                        <th class="text-center">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--
+                    <tr v-for="info in data.datas" :key="info.name">
+                        <td class="text-center">{{ info.subject }}</td>
+                        <td class="text-right">{{ info.value }}</td>
+                    </tr>
+                    -->
+                </tbody>
+                </template>
+            </v-simple-table>
             <div v-if="code_search_yn">
                 <!--
                 <v-data-table
@@ -279,6 +314,75 @@ export default{
                 this.data.datas = []
                 this.code_info = []
             }
+        },
+        get_score(){
+            // 1. 최대 거래량 score
+            var max_cir_ratio = Number(this.data.max_info.max_cir_ratio)
+            var max_cir_ratio_score = 0
+            if( max_cir_ratio >= 100.0 ){ max_cir_ratio_score = 5 }
+            else if( 70.0 <= max_cir_ratio ){ max_cir_ratio_score = 4 }
+            else if( 40.0 <= max_cir_ratio ){ max_cir_ratio_score = 3 }
+            else if( 10.0 <= max_cir_ratio ){ max_cir_ratio_score = 2 }
+            else{ max_cir_ratio_score = 1 }
+
+            alert(max_cir_ratio_score)
+
+            // 2. 구간 거래량
+            var tot_cir_ratio = Number(this.data.max_info.tot_cir_ratio)
+            alert(tot_cir_ratio)
+            var tot_cir_ratio_score = 0
+            if( tot_cir_ratio >= 200 && tot_cir_ratio <= 500 ){ tot_cir_ratio_score = 5 }
+            else if ( tot_cir_ratio >= 150 && tot_cir_ratio < 200 ){ tot_cir_ratio_score = 4 }
+            else if ( tot_cir_ratio >= 500 && tot_cir_ratio < 600 ){ tot_cir_ratio_score = 4 }
+            else if ( tot_cir_ratio >= 120 && tot_cir_ratio < 150 ){ tot_cir_ratio_score = 3 }
+            else if ( tot_cir_ratio >= 600 && tot_cir_ratio < 800 ){ tot_cir_ratio_score = 3 }
+            else if ( tot_cir_ratio >= 100 && tot_cir_ratio < 120 ){ tot_cir_ratio_score = 2 }
+            else if ( tot_cir_ratio >= 800 && tot_cir_ratio < 1000 ){ tot_cir_ratio_score = 2 }
+            else if ( tot_cir_ratio < 100 || tot_cir_ratio > 1000 ){ tot_cir_ratio_score = 1 }
+
+            alert(tot_cir_ratio_score)
+
+            // 3. 개인 매수 비율
+            var cir_stock_cnt = this.data.company_detail_info.cir_stock_cnt.replace(/,/gi,"") // 유통주식수
+            var ind_tr_cnt = this.data.datas[2].value.replace(/,/gi,"")
+            var ind_tr_ratio = Number(ind_tr_cnt / cir_stock_cnt * 100).toFixed(2)
+            var ind_tr_ratio_score = 0
+            if( ind_tr_ratio >= 10 ){ ind_tr_ratio_score = 5 }
+            else if( ind_tr_ratio >= 5 ){ ind_tr_ratio_score = 4 }
+            else if( ind_tr_ratio >= 3 ){ ind_tr_ratio_score = 3 }
+            else if( ind_tr_ratio >= 1 ){ ind_tr_ratio_score = 2 }
+            else if( ind_tr_ratio >= 0 ){ ind_tr_ratio_score = 1 }
+            alert("ind_tr_ratio : " + ind_tr_ratio)
+            alert(ind_tr_ratio_score)
+
+            // 4. 개인 매수세 확인
+            var total_tr_cnt = 0;
+            var minus_tr_cnt = 0;
+            var minus_ratio = 0;
+            var minus_ratio_score = 0;
+            for( var i = 0 ; i <= this.data.transition.length ; i ++ ){
+                total_tr_cnt++;
+                var ind_tran_cnt = this.data.transition[i][3].replace(/,/gi,"")
+                if( ind_tran_cnt < 0 ){
+                    minus_tr_cnt++;
+                }
+            }
+            minus_ratio = minus_tr_cnt / total_tr_cnt * 100;
+
+            if( minus_ratio == 0 ) { minus_ratio_score = 5 }
+            else if( minus_ratio < 10 ){ minus_ratio_score = 4 }
+            else if( minus_ratio < 20 ){ minus_ratio_score = 3 }
+            else if( minus_ratio < 35 ){ minus_ratio_score = 2 }
+            else if( minus_ratio < 50 ){ minus_ratio_score = 1 }
+
+            alert("minus_ratio : " + minus_ratio)
+            alert("minus_ratio_score : " + minus_ratio_score)
+
+            
+
+
+
+
         }
     },
     mounted() {

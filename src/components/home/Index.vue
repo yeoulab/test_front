@@ -54,6 +54,7 @@ export default {
         this.$store.commit('setPageName',{
                           pageName: '인터내쇼날'
                         })
+        this.getGlobalIndex()
     }
 }
 </script>
