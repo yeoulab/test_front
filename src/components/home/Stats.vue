@@ -111,6 +111,9 @@ export default {
             })
             .then((result => {
                 console.log(result.data)
+                this.$store.commit('setStatResult',{
+                          stats_result: result.data
+                        }),
                 this.stats_result = result.data
             }))
         },
@@ -151,6 +154,8 @@ export default {
         this.$store.commit('setPageName',{
                           pageName: '통계'
                         })
+        // vuex 에 있는 조회결과값을 가져온다.
+        this.stats_result = this.$store.state.stats_result
     }
 }
 </script>

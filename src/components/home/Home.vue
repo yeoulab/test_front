@@ -31,26 +31,7 @@
                 </v-col>
             </v-row>
             <!-- 2020-05-23
-                 last date 의 미사용으로 주석처리
-            <v-row style="height: 50px;"
-            >
-                <v-col>
-                    <v-text-field 
-                        label="start date" 
-                        outlined 
-                        dense
-                        v-model="start_date">
-                    </v-text-field>
-                </v-col>
-                <v-col>
-                    <v-text-field 
-                        label="last date" 
-                        outlined 
-                        dense
-                        v-model="end_date">
-                    </v-text-field>
-                </v-col>
-            </v-row>            
+                 last date 의 미사용으로 주석처리            
             -->
             <v-row class="mb-1">
                 <v-col xs4 sm4 md3>
@@ -62,12 +43,45 @@
                 <v-col xs4 sm4 md3>
                     <v-btn small @click="insert_diary">Save Diary</v-btn>
                 </v-col>
-                <div v-if="search_yn">
-                    <v-col xs4 sm4 md3>
-                        <v-btn small @click="get_score">Get Score</v-btn>
-                    </v-col>
-                </div>
             </v-row>
+            <v-row v-if="search_yn">
+                <v-col>
+                    테마
+                    <v-radio-group v-model="theme_score" :mandatory="true">
+                        <v-radio small label="3" value=3></v-radio>
+                        <v-radio small label="2" value=2></v-radio>
+                        <v-radio small label="1" value=1></v-radio>
+                    </v-radio-group>
+                </v-col>
+                <v-col>
+                    뉴스/공시
+                    <v-radio-group v-model="news_score" :mandatory="true">
+                        <v-radio small label="3" value=3></v-radio>
+                        <v-radio small label="2" value=2></v-radio>
+                        <v-radio small label="1" value=1></v-radio>
+                    </v-radio-group>
+                </v-col>
+                <v-col>
+                    재무정보
+                    <v-radio-group v-model="fin_score" :mandatory="true">
+                        <v-radio small label="3" value=3></v-radio>
+                        <v-radio small label="2" value=2></v-radio>
+                        <v-radio small label="1" value=1></v-radio>
+                    </v-radio-group>
+                </v-col>
+                <v-col>
+                    <div>   
+                        <v-btn @click="get_score">
+                            아자
+                        </v-btn>
+                    </div>
+                    <br>
+                    <h2>
+                        {{ total_score }} 점
+                    </h2>
+                </v-col>
+            </v-row>
+            <!--
             <v-simple-table dense>
                 <template v-slot:default>
                 <thead>
@@ -76,16 +90,17 @@
                         <th class="text-center">Score</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody> -->
                     <!--
                     <tr v-for="info in data.datas" :key="info.name">
                         <td class="text-center">{{ info.subject }}</td>
                         <td class="text-right">{{ info.value }}</td>
                     </tr>
                     -->
+                <!--
                 </tbody>
                 </template>
-            </v-simple-table>
+            </v-simple-table> -->
             <div v-if="code_search_yn">
                 <!--
                 <v-data-table
@@ -185,11 +200,6 @@
                             <th class="text-center">기관</th>
                             <th class="text-center">개인</th>
                             <th class="text-center">평균거래</th>
-                            <th class="text-center">외인(종가)</th>
-                            <th class="text-center">기관(종가)</th>
-                            <th class="text-center">개인(종가)</th>
-                            <th class="text-center">거래(종가)</th>
-                            <th class="text-center">비율(종가)</th>
                             <th class="text-center">외인(평균)</th>
                             <th class="text-center">기관(평균)</th>
                             <th class="text-center">개인(평균)</th>
@@ -241,6 +251,10 @@ export default{
                 company_detail_info: {},
                 transition: [],
             },
+            theme_score: 0,
+            news_score: 0,
+            fin_score: 0,
+            total_score: 0,
         }
     },
     methods: {
@@ -325,11 +339,11 @@ export default{
             else if( 10.0 <= max_cir_ratio ){ max_cir_ratio_score = 2 }
             else{ max_cir_ratio_score = 1 }
 
-            alert(max_cir_ratio_score)
+            console.log("max_cir_ratio_score : " + max_cir_ratio_score)
 
             // 2. 구간 거래량
             var tot_cir_ratio = Number(this.data.max_info.tot_cir_ratio)
-            alert(tot_cir_ratio)
+            console.log(tot_cir_ratio)
             var tot_cir_ratio_score = 0
             if( tot_cir_ratio >= 200 && tot_cir_ratio <= 500 ){ tot_cir_ratio_score = 5 }
             else if ( tot_cir_ratio >= 150 && tot_cir_ratio < 200 ){ tot_cir_ratio_score = 4 }
@@ -340,7 +354,7 @@ export default{
             else if ( tot_cir_ratio >= 800 && tot_cir_ratio < 1000 ){ tot_cir_ratio_score = 2 }
             else if ( tot_cir_ratio < 100 || tot_cir_ratio > 1000 ){ tot_cir_ratio_score = 1 }
 
-            alert(tot_cir_ratio_score)
+            console.log("tot_cir_ratio_score : "+tot_cir_ratio_score)
 
             // 3. 개인 매수 비율
             var cir_stock_cnt = this.data.company_detail_info.cir_stock_cnt.replace(/,/gi,"") // 유통주식수
@@ -352,21 +366,22 @@ export default{
             else if( ind_tr_ratio >= 3 ){ ind_tr_ratio_score = 3 }
             else if( ind_tr_ratio >= 1 ){ ind_tr_ratio_score = 2 }
             else if( ind_tr_ratio >= 0 ){ ind_tr_ratio_score = 1 }
-            alert("ind_tr_ratio : " + ind_tr_ratio)
-            alert(ind_tr_ratio_score)
+            console.log("ind_tr_ratio : " + ind_tr_ratio)
+            console.log("ind_tr_ratio_score : " + ind_tr_ratio_score)
 
             // 4. 개인 매수세 확인
             var total_tr_cnt = 0;
             var minus_tr_cnt = 0;
             var minus_ratio = 0;
             var minus_ratio_score = 0;
-            for( var i = 0 ; i <= this.data.transition.length ; i ++ ){
+            for( var i = 0 ; i < this.data.transition.length ; i ++ ){
                 total_tr_cnt++;
-                var ind_tran_cnt = this.data.transition[i][3].replace(/,/gi,"")
-                if( ind_tran_cnt < 0 ){
+                var ind_tran_cnt = this.data.transition[i][3].replace(/,/gi,"")                
+                if( ind_tran_cnt < 0 ){                    
                     minus_tr_cnt++;
                 }
             }
+            console.log("minus_tr_cnt : " + minus_tr_cnt)
             minus_ratio = minus_tr_cnt / total_tr_cnt * 100;
 
             if( minus_ratio == 0 ) { minus_ratio_score = 5 }
@@ -375,14 +390,46 @@ export default{
             else if( minus_ratio < 35 ){ minus_ratio_score = 2 }
             else if( minus_ratio < 50 ){ minus_ratio_score = 1 }
 
-            alert("minus_ratio : " + minus_ratio)
-            alert("minus_ratio_score : " + minus_ratio_score)
+            console.log("minus_ratio : " + minus_ratio)
+            console.log("minus_ratio_score : " + minus_ratio_score)
 
+            // 5. 개인 평균가 vs 현재가
+            var split_result = this.data.datas[8].value.split('/');
+            var avg_amt_ratio = split_result[1].replace(/%/gi,"")
+            var avg_amt_ratio_score = 0
+            console.log("avg_amt_ratio : " + avg_amt_ratio)
+            if( avg_amt_ratio > 20 && avg_amt_ratio <=30 ){ avg_amt_ratio_score = 5 }
+            else if( avg_amt_ratio > 10 && avg_amt_ratio <= 20 ){ avg_amt_ratio_score = 4 }
+            else if( avg_amt_ratio > 3  && avg_amt_ratio <= 10 ){ avg_amt_ratio_score = 3 }
+            else if( avg_amt_ratio > 30 && avg_amt_ratio <= 50 ){ avg_amt_ratio_score = 3 }
+            else if( avg_amt_ratio >  0 && avg_amt_ratio <= 3  ){ avg_amt_ratio_score = 2 }
+            else if( avg_amt_ratio > 50 ){ avg_amt_ratio_score =  2 }
+            else{ avg_amt_ratio_score = 1 }
+            console.log("avg_amt_ratio_score : " + avg_amt_ratio_score)
             
+            // 6. 테마
+            //  3점 - 테마가 확실한가(정치테마주인 경우에는 대장주, 전기차 등등 테마가 명확한가)
+            //  2점 - 테마가 보통(마스크, 자동차, 반도체 부품주 등)
+            //  1점 - 테마가 불확실함(망한 정치인...)
+            var theme_score = parseInt(this.theme_score)
 
+            // 7. 뉴스 및 공시
+            //  3점 - 무상증자, 자사주 매입, 주식 소각등 좋은 뉴스들이 많은지
+            //  2점 - 보통
+            //  1점 - 감자, 유상증자, CB 발행, 타회사 담보 등
+            var news_score = parseInt(this.news_score)
 
+            // 8. 재무제표
+            //  3점 - 만성흑자 
+            //  2점 - 흑자적자 왔다리갔다리
+            //  1점 - 만성적자
+            var fin_score = parseInt(this.fin_score)
 
+            console.log("theme_score : " + theme_score)
+            console.log("news_score : " + news_score)
+            console.log("fin_score : " + fin_score)
 
+            this.total_score = (max_cir_ratio_score + tot_cir_ratio_score + ind_tr_ratio_score + minus_ratio_score + avg_amt_ratio_score + theme_score + news_score + fin_score) * 3
         }
     },
     mounted() {

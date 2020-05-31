@@ -18,7 +18,8 @@ export const store = new Vuex.Store({
         item_name: '',
         item_code: '',
         start_date: '',
-      }
+      },
+      stats_result: [],
     },
     mutations: {
       setCustomer: function(state, payload){        
@@ -49,6 +50,10 @@ export const store = new Vuex.Store({
       },
       setPageName(state, payload){
         state.pageName = payload.pageName
+      },
+      setStatResult: function(state, payload){
+        console.log("setStatResult : " + payload.stats_result[0].company_name)
+        state.stats_result = payload.stats_result
       }
     }
   })
