@@ -42,7 +42,7 @@ export default {
     },
     methods:{
         getGlobalIndex(){
-            axios.get('/globalIndex')
+            axios.get('/global/index')
             .then((res) =>{
                 console.log(res.data)
                 

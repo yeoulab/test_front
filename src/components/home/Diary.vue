@@ -72,14 +72,14 @@
         },
         methods: {
             get_diary(){
-                axios.get('/search/diary')
+                axios.get('/diary')
                 .then((result) =>{
                     console.log(result)
                     this.datas = result.data
                 })
             },
             update_diary(data){
-                axios.post('/update/diary', data,                    
+                axios.put('/diary', data,                    
                     ).then(res => {
                         if(res){
                             console.log(res)

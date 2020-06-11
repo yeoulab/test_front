@@ -290,13 +290,13 @@ export default{
             params.company_name = this.item_name
             params.buy_reasone = "개인매수단가 : " + this.data.datas[5].value
             console.log(params)
-            axios.post('/insert/diary', params)
+            axios.post('/diary', params)
             .then(res => {
                 console.log(res)
             })
         },
         item_name_change(){
-            axios.get('/code',{
+            axios.get('/item/code',{
                 params: {
                     item_name: this.item_name,
                 }
@@ -304,12 +304,15 @@ export default{
             .then((result) =>{
                 console.log(result)
                 this.item_code = result.data
+                if( this.item_code != "" ){
+                    this.item_change()
+                }
             })
         },
         item_change(){
             if( this.item_code.length == 6 ){
                 // item 정보 조회하는 api 호출
-                axios.get('/codeInfo',{
+                axios.get('/item/info',{
                     params: {
                         item_code: this.item_code,
                     }

@@ -101,7 +101,7 @@ export default {
                 alert("배치일자는 입력합시다")
                 return
             }
-            axios.get('/search/stats',{
+            axios.get('/stats',{
                 params: {
                     item: this.item_code,
                     tr_date: this.tr_date,
@@ -118,7 +118,7 @@ export default {
             }))
         },
         item_name_change(){
-            axios.get('/code',{
+            axios.get('/item/code',{
                 params: {
                     item_name: this.item_name,
                 }
@@ -126,12 +126,15 @@ export default {
             .then((result) =>{
                 console.log(result)
                 this.item_code = result.data
+                if( this.item_code != "" ){
+                    this.item_change()
+                }
             })
         },
         item_change(){
             if( this.item_code.length == 6 ){
                 // item 정보 조회하는 api 호출
-                axios.get('/codeInfo',{
+                axios.get('/item/info',{
                     params: {
                         item_code: this.item_code,
                     }
