@@ -34,17 +34,17 @@
                  last date 의 미사용으로 주석처리            
             -->
             <v-row class="mb-1">
-                <v-col xs4 sm4 md3>
+                <v-col xs3 sm3 md3>
                     <v-btn small color="success" @click="getInfo">Call Api</v-btn>
                 </v-col>
-                <v-col xs4 sm4 md3>
+                <v-col xs3 sm3 md3>
                     <v-btn small @click="getFinInfo">뉴스/공시</v-btn>
                 </v-col>
-                <v-col xs4 sm4 md3>
+                <v-col xs3 sm3 md3>
                     <v-btn small @click="getCompInfo">재무정보</v-btn>
                 </v-col>
-                <v-col xs4 sm4 md3>
-                    <v-btn small @click="insert_diary">일기장으로..</v-btn>
+                <v-col xs3 sm3 md3>
+                    <v-btn small @click="insert_diary">일기장</v-btn>
                 </v-col>
             </v-row>
             <v-row v-if="search_yn">
