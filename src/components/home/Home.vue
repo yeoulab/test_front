@@ -38,10 +38,13 @@
                     <v-btn small color="success" @click="getInfo">Call Api</v-btn>
                 </v-col>
                 <v-col xs4 sm4 md3>
-                    <v-btn small @click="getCompInfo">Company Info</v-btn>
+                    <v-btn small @click="getFinInfo">뉴스/공시</v-btn>
                 </v-col>
                 <v-col xs4 sm4 md3>
-                    <v-btn small @click="insert_diary">Save Diary</v-btn>
+                    <v-btn small @click="getCompInfo">재무정보</v-btn>
+                </v-col>
+                <v-col xs4 sm4 md3>
+                    <v-btn small @click="insert_diary">일기장으로..</v-btn>
                 </v-col>
             </v-row>
             <v-row v-if="search_yn">
@@ -232,6 +235,7 @@ export default{
             end_date: '',
             baseLink: 'https://navercomp.wisereport.co.kr/v2/company/c1010001.aspx?cmp_cd=',
             link: '',
+            totLink: 'https://m.stock.naver.com/item/main.nhn#/stocks/',
             headers: [
                 { text: 'Subject', value: 'subject'},
                 { text: 'Value', value: 'value'}
@@ -282,6 +286,14 @@ export default{
         },
         getCompInfo(){
             window.open(this.link ,"");
+        },
+        getFinInfo(){
+
+            if( this.item_code == "" ){
+                return
+            }
+            var new_link = this.totLink + this.item_code + "/news"
+            window.open(new_link, "");
         },
         insert_diary(){
             var params = {}
