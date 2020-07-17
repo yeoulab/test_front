@@ -85,8 +85,7 @@
                             console.log(res)
                         }
                     })
-            },
-            
+            },            
             go_to_first(data){
                 this.$store.commit('setStockInfo',{
                     item_code: data.jongmok_code,

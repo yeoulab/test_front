@@ -13,6 +13,7 @@
             v-for="link in links"
             :key="link.btnName"
             router :to="link.route">
+            <span>{{ link.text }}</span>
             <v-icon>{{ link.btnName }}</v-icon>
             </v-btn>
         </v-bottom-navigation>      
@@ -35,6 +36,7 @@ export default {
           {btnName: 'mdi-chart-bell-curve-cumulative', text: '지수정보', route: '/main/index'},
           {btnName: 'mdi-file-document-edit', text: '다이어리', route: '/main/diary'},
           {btnName: 'mdi-clipboard-list-outline', text: '통계', route: '/main/stats'},
+          {btnName: 'mdi-chart-gantt', text: '테마관리', route: '/main/theme'},
           //{btnName: 'mdi-account', text: '', route: '/myInfo'},
         ]
       }

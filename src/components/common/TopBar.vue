@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <v-app-bar flat app dense class="grey lighten-5">
+        <v-app-bar flat app dense color="gray"><!--class="grey lighten-5" >-->
             <v-toolbar-title class="font-weight-bold black--text ml-2">{{ this.$store.state.pageName }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field 

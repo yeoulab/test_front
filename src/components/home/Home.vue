@@ -33,10 +33,7 @@
             <!-- 2020-05-23
                  last date 의 미사용으로 주석처리            
             -->
-            <v-row class="mb-1">
-                <v-col xs3 sm3 md3>
-                    <v-btn small color="success" @click="getInfo">Call Api</v-btn>
-                </v-col>
+            <v-row class="mb-1">                
                 <v-col xs3 sm3 md3>
                     <v-btn small @click="getFinInfo">뉴스/공시</v-btn>
                 </v-col>
@@ -46,8 +43,11 @@
                 <v-col xs3 sm3 md3>
                     <v-btn small @click="insert_diary">일기장</v-btn>
                 </v-col>
+                <v-col xs3 sm3 md3>
+                    <v-btn small color="success" @click="getInfo">Call Api</v-btn>
+                </v-col>
             </v-row>
-            <v-row v-if="search_yn">
+            <v-row v-show=false> <!-- 2020/07/18 사용하지 않아 삭제함 -->
                 <v-col>
                     테마
                     <v-radio-group v-model="theme_score" :mandatory="true">
@@ -114,6 +114,7 @@
                     item-key="subject">
                 </v-data-table>
                 -->
+                <v-card class="mx-auto" tile>          
                 <v-simple-table dense>
                     <template v-slot:default>
                         <tbody>
@@ -124,18 +125,11 @@
                         </tbody>
                     </template>
                 </v-simple-table>
+                </v-card>
             </div>            
             <br>
             <div v-if="search_yn">
-                <!--
-                <v-data-table
-                    dense
-                    :headers="headers2"
-                    :items="data.datas"
-                    hide-default-footer
-                    item-key="subject">
-                </v-data-table> -->
-                <br>
+                <v-card class="mx-auto" tile>
                 <v-simple-table dense>
                     <template v-slot:default>
                         <tbody>
@@ -174,51 +168,56 @@
                         </tbody>
                     </template>
                 </v-simple-table>
+                </v-card>
                 <br>
-                <v-simple-table dense>
-                    <template v-slot:default>
-                    <thead>
-                        <tr>
-                            <th class="text-center">주제</th>
-                            <th class="text-center">현재값</th>
-                            <th class="text-center">직전값</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="info in data.datas" :key="info.name">
-                            <td class="text-center">{{ info.subject }}</td>
-                            <td class="text-right">{{ info.value }}</td>
-                            <td class="text-right">{{ info.pre_value }}</td>
-                        </tr>
-                    </tbody>
-                    </template>
-                </v-simple-table>
+                <v-card class="mx-auto" tile>
+                    <v-simple-table dense>
+                        <template v-slot:default>
+                        <thead>
+                            <tr>
+                                <th class="text-center">주제</th>
+                                <th class="text-center">현재값</th>
+                                <th class="text-center">직전값</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="info in data.datas" :key="info.name">
+                                <td class="text-center">{{ info.subject }}</td>
+                                <td class="text-right">{{ info.value }}</td>
+                                <td class="text-right">{{ info.pre_value }}</td>
+                            </tr>
+                        </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-card>
                 <br>
-                <v-simple-table dense>
-                    <template v-slot:default>
-                    <thead>
-                        <tr>
-                            <th class="text-center">Date</th>
-                            <th class="text-center">외인</th>
-                            <th class="text-center">기관</th>
-                            <th class="text-center">개인</th>
-                            <th class="text-center">평균거래</th>
-                            <th class="text-center">외인(평균)</th>
-                            <th class="text-center">기관(평균)</th>
-                            <th class="text-center">개인(평균)</th>
-                            <th class="text-center">거래(평균)</th>
-                            <th class="text-center">비율(평균)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(info, i) in data.transition" :key="i">
-                            <td v-for="(val, j) in info" :key="j">
-                                {{ info[j] }}
-                            </td>
-                        </tr>
-                    </tbody>
-                    </template>
-                </v-simple-table>
+                <v-card class="mx-auto" tile>
+                    <v-simple-table dense>
+                        <template v-slot:default>
+                        <thead>
+                            <tr>
+                                <th class="text-center">Date</th>
+                                <th class="text-center">외인</th>
+                                <th class="text-center">기관</th>
+                                <th class="text-center">개인</th>
+                                <th class="text-center">평균거래</th>
+                                <th class="text-center">외인(평균)</th>
+                                <th class="text-center">기관(평균)</th>
+                                <th class="text-center">개인(평균)</th>
+                                <th class="text-center">거래(평균)</th>
+                                <th class="text-center">비율(평균)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(info, i) in data.transition" :key="i">
+                                <td v-for="(val, j) in info" :key="j">
+                                    {{ info[j] }}
+                                </td>
+                            </tr>
+                        </tbody>
+                        </template>
+                    </v-simple-table>
+                </v-card>
             </div>
         </v-container>
     </div>

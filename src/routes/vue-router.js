@@ -8,6 +8,7 @@ import Home from '../components/home/Home'
 import Index from '../components/home/Index'
 import Diary from '../components/home/Diary'
 import Stats from '../components/home/Stats'
+import Theme from '../components/home/Theme'
 
 //import MyInfo from '../components/my/MyInfo'
 //import Login from '../components/my/Login'
@@ -35,6 +36,9 @@ export default new Router({
             }, {
                 path: 'stats',
                 component: Stats,
+            }, {
+                path: 'theme',
+                component: Theme,
             }]
         },
         {path: '/', component: Door},
