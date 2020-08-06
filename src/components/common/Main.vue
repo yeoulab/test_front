@@ -13,7 +13,7 @@
             v-for="link in links"
             :key="link.btnName"
             router :to="link.route">
-            <span>{{ link.text }}</span>
+            <!--<span>{{ link.text }}</span>-->
             <v-icon>{{ link.btnName }}</v-icon>
             </v-btn>
         </v-bottom-navigation>      

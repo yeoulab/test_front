@@ -124,12 +124,12 @@
                 <!-- <template v-if="$vuetify.breakpoint.mdAndUp"> -->
                 <v-spacer></v-spacer>
                 <v-select
-                v-model="sortBy"
-                flat
-                solo-inverted
-                hide-details
-                :items="keys"
-                label="정렬"
+                    v-model="sortBy"
+                    flat
+                    solo-inverted
+                    hide-details
+                    :items="keys"
+                    label="정렬"
                 ></v-select>
                 <v-spacer></v-spacer>
                 <v-btn-toggle v-model="sortDesc" mandatory>

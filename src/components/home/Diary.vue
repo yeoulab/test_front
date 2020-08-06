@@ -1,63 +1,84 @@
 <template>
     <v-container>
-        <!--
-        <v-btn icon small @click="get_diary">
-            <v-icon>mdi-owl</v-icon>
-        </v-btn>
-        -->
-        <v-dialog width="500" v-for="data in datas" v-bind:key=data.jongmok_code>
-            <template v-slot:activator="{ on }">
-                <v-card v-on="on">
-                    <v-card-text>
-                        {{ data.company_name }}({{ data.jongmok_code }}) from {{ data.start_date }}
-                    </v-card-text>
-                </v-card>
+        <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+        ></v-text-field>
+        <v-data-table
+            :headers="headers"
+            :items="datas"
+            :search="search"
+            class="elevation-1"
+            :mobile-breakpoint="mobileBreakpoint"
+            :items-per-page="pageCount"
+            hide-default-footer
+        >
+            <template v-slot:top>
+                <v-dialog v-model="dialog" max-width="500px">
+                    <v-card>
+                        <v-card-text>
+                        <v-container grid-list-xs>
+                            <v-layout wrap>
+                                <v-flex xs4 sm4 md3>
+                                    <v-text-field readonly :value=editedItem.company_name></v-text-field>
+                                </v-flex>
+                                <v-flex xs4 sm4 md3>
+                                    <v-text-field readonly :value=editedItem.jongmok_code></v-text-field>
+                                </v-flex>
+                                <v-flex xs4 sm4 md3>
+                                    <v-text-field readonly :value=editedItem.start_date></v-text-field>
+                                </v-flex>
+                                <v-flex xs12 style="height: 105px">
+                                    <v-textarea label="매수이유" outlined rows="3" row-height="24"
+                                            :value=editedItem.buy_reason v-model=editedItem.buy_reason>
+                                    </v-textarea>
+                                </v-flex>
+                                <v-flex xs12 style="height: 105px">
+                                    <v-textarea label="매도시점" outlined rows="3" row-height="24"
+                                            :value=editedItem.sell_reason v-model=editedItem.sell_reason>
+                                    </v-textarea>
+                                </v-flex>
+                                <v-flex xs12 style="height: 105px">
+                                    <v-textarea label="성공요인" outlined rows="3" row-height="24"
+                                            :value=editedItem.suc_reason v-model=editedItem.suc_reason>
+                                    </v-textarea>
+                                </v-flex>
+                                <v-flex xs12 style="height: 105px">
+                                    <v-textarea label="실패이유" outlined rows="3" row-height="24"
+                                            :value=editedItem.fail_reason v-model=editedItem.fail_reason>
+                                    </v-textarea>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                        <v-spacer></v-spacer>
+                            <v-btn color="blue darken-1" @click="go_to_first(editedItem)">첫화면</v-btn>
+                            <v-btn color="blue darken-1" @click="update_diary(editedItem)">Save</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+                <!-- </v-toolbar> -->
+                </template>
+                <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                    mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                    mdi-delete
+                </v-icon>
             </template>
-            <v-card>
-                <v-card-text>
-                <v-container grid-list-xs>
-                    <v-layout wrap>
-                        <v-flex xs4 sm4 md3>
-                            <v-text-field readonly :value=data.company_name></v-text-field>
-                        </v-flex>
-                        <v-flex xs4 sm4 md3>
-                            <v-text-field readonly :value=data.jongmok_code></v-text-field>
-                        </v-flex>
-                        <v-flex xs4 sm4 md3>
-                            <v-text-field readonly :value=data.start_date></v-text-field>
-                        </v-flex>
-                        <v-flex xs12 style="height: 105px">
-                            <v-textarea label="매수이유" outlined rows="3" row-height="24"
-                                    :value=data.buy_reason v-model=data.buy_reason>
-                            </v-textarea>
-                        </v-flex>
-                        <v-flex xs12 style="height: 105px">
-                            <v-textarea label="매도시점" outlined rows="3" row-height="24"
-                                    :value=data.sell_reason v-model=data.sell_reason>
-                            </v-textarea>
-                        </v-flex>
-                        <v-flex xs12 style="height: 105px">
-                            <v-textarea label="성공요인" outlined rows="3" row-height="24"
-                                    :value=data.suc_reason v-model=data.suc_reason>
-                            </v-textarea>
-                        </v-flex>
-                        <v-flex xs12 style="height: 105px">
-                            <v-textarea label="실패이유" outlined rows="3" row-height="24"
-                                    :value=data.fail_reason v-model=data.fail_reason>
-                            </v-textarea>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
-                </v-card-text>
-                <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" 
-                    @click="go_to_first(data)">첫화면</v-btn>
-                <v-btn color="blue darken-1" 
-                    @click="update_diary(data)">Save</v-btn>
-                </v-card-actions>
-            </v-card>                     
-        </v-dialog>
+        </v-data-table>
     </v-container>
 </template>
 <script>
@@ -67,7 +88,33 @@
         data() {
             return {
                 datas: [],
-                dialog: false
+                dialog: false,
+                search: '',
+                mobileBreakpoint: 300,
+                pageCount: 1000,
+                editedIndex: -1,
+                editedItem:{
+                    company_name: '',
+                    jongmok_code: '',
+                    start_date: '',
+                    buy_reason: '',
+                    sell_reason: '',
+                    suc_reason: '',
+                    fail_reason: '',
+                },
+                filter: {},
+                sortDesc: false,
+                page: 1,         
+                headers: [
+                    {
+                        text: '종목명',
+                        align: 'start',
+                        value: 'company_name',
+                    },
+                    { text: '코드', value: 'jongmok_code' },
+                    { text: '시작일자', value: 'start_date' },
+                    { text: 'Actions', value: 'actions', sortable: false}
+                ],
             }
         },
         methods: {
@@ -93,6 +140,26 @@
                     start_date: data.start_date,
                 })            
                 this.$router.push("/main/home");    
+            },
+            editItem(data){
+                this.editedIndex = this.datas.indexOf(data)
+                this.editedItem = Object.assign({}, data)
+                this.dialog = true
+            },
+            deleteItem(data){
+                //const index = this.datas.indexOf(data)
+                this.editedItem = Object.assign({}, data)
+                confirm("정말 삭제하시겠습니까?") &&
+                axios.delete('/diary',{
+                    params: {
+                        item_code: this.editedItem.jongmok_code,
+                        start_date: this.editedItem.start_date,
+                    }
+                }).then(res => {
+                        if(res){
+                            this.get_diary()
+                        }
+                    })
             }
         },
         mounted() {
@@ -100,7 +167,12 @@
                             pageName: '드아이어리'
                             })
             this.get_diary()    
-        }
+        },
+        watch: {
+            dialog (val) {
+                val || this.close()
+            },
+        },        
     }
 </script>
 <style>
