@@ -1,5 +1,13 @@
 <template>
     <div class="theme">
+        <v-dialog v-model="dialog5" persistent max-width="290">
+            <div class="text-center">
+                <v-progress-linear
+                    indeterminate
+                    color="green"
+                ></v-progress-linear>
+            </div>
+        </v-dialog>
         <v-container fluid grid-list-md>
             <v-row>
                 <v-col xs6 sm4 md3>
@@ -73,7 +81,7 @@
                                 </v-btn>
                             </v-card>
                         </v-dialog>
-                        <v-btn color="blue">계산</v-btn>
+                        <v-btn color="blue" @click="calc_theme_item()">계산</v-btn>
                     <v-card class="mx-auto" tile>
                         <v-list dense>
                             <v-subheader>종목</v-subheader>
@@ -102,97 +110,33 @@
                     </v-card>
                 </v-col>
             </v-row>
-            <v-data-iterator
+            <br>
+            <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Search"
+                single-line
+                hide-details
+            ></v-text-field>            
+            <v-data-table
+                :headers="headers"
                 :items="theme_items"
-                :items-per-page.sync="itemsPerPage"
-                :page="page"
                 :search="search"
-                :sort-by="sortBy.toLowerCase()"
-                :sort-desc="sortDesc"
+                class="elevation-1"
+                :mobile-breakpoint="mobileBreakpoint"
+                :items-per-page="1000"
                 hide-default-footer
             >
-            <template v-slot:header>
-                <v-toolbar dark color="blue darken-3" class="mb-1">
-                <v-text-field
-                    v-model="search"
-                    clearable
-                    flat
-                    solo-inverted
-                    hide-details
-                    label="검색"
-                ></v-text-field>
-                <!-- <template v-if="$vuetify.breakpoint.mdAndUp"> -->
-                <v-spacer></v-spacer>
-                <v-select
-                    v-model="sortBy"
-                    flat
-                    solo-inverted
-                    hide-details
-                    :items="keys"
-                    label="정렬"
-                ></v-select>
-                <v-spacer></v-spacer>
-                <v-btn-toggle v-model="sortDesc" mandatory>
-                    <v-btn large depressed color="blue" :value="false">
-                        <v-icon>mdi-arrow-up</v-icon>
-                    </v-btn>
-                    <v-btn large depressed color="blue" :value="true">
-                        <v-icon>mdi-arrow-down</v-icon>
-                    </v-btn>
-                </v-btn-toggle>
-                <!-- </template> -->
-                </v-toolbar>
-            </template>
-            <template v-slot:default="props">
-                <v-row>
-                <v-col v-for="item in props.items" :key="item.name" cols="12" sm="6" md="4" lg="3">
-                    <v-card>
-                    <v-card-title class="subheading font-weight-bold">{{ item.name }}</v-card-title>
-                    <v-divider></v-divider>
-                    <v-list dense>
-                        <v-list-item v-for="(key, index) in keys" :key="index">
-                        <v-list-item-content :class="{ 'blue--text': sortBy === key }">{{ key }}:</v-list-item-content>
-                        <v-list-item-content class="align-end flex-column" :class="{ 'blue--text': sortBy === key }">{{ item[key.toLowerCase()] }}</v-list-item-content>
-                        </v-list-item>
-                    </v-list>
-                    </v-card>
-                </v-col>
-                </v-row>
-            </template>
-
-            <template v-slot:footer>
-                <v-row class="mt-2" align="center" justify="center">
-                    <span class="grey--text">Items per page</span>
-                    <v-menu offset-y>
-                        <template v-slot:activator="{ on, attrs }">
-                        <v-btn dark text color="primary" class="ml-2" v-bind="attrs" v-on="on">
-                            {{ itemsPerPage }}
-                            <v-icon>mdi-chevron-down</v-icon>
-                        </v-btn>
-                        </template>
-                        <v-list>
-                        <v-list-item
-                            v-for="(number, index) in itemsPerPageArray"
-                            :key="index"
-                            @click="updateItemsPerPage(number)"
-                        >
-                            <v-list-item-title>{{ number }}</v-list-item-title>
-                        </v-list-item>
-                        </v-list>
-                    </v-menu>
-                    <v-spacer></v-spacer>
-                    <span class="mr-4 grey--text">
-                        Page {{ page }} of {{ numberOfPages }}
-                    </span>
-                    <v-btn fab dark small color="blue darken-3" class="mr-1" @click="formerPage">
-                        <v-icon>mdi-chevron-left</v-icon>
-                    </v-btn>
-                    <v-btn fab dark small color="blue darken-3" class="ml-1" @click="nextPage">
-                        <v-icon>mdi-chevron-right</v-icon>
-                    </v-btn>
-                </v-row>
-            </template>
-            </v-data-iterator>
+                <template v-slot:item.actions="{ item }">
+                    <v-icon
+                        small
+                        class="mr-2"
+                        @click="go_to_first(item)"
+                    >
+                        mdi-bullseye-arrow
+                    </v-icon>
+                </template>
+            </v-data-table>
         </v-container>
     </div>
 </template>
@@ -214,45 +158,35 @@ export default {
             theme_id: '',
             theme_item_code: '',
             // 아래는 테마조회를 위한 변수들
-            itemsPerPageArray: [4, 8, 12],
             search: '',
-            filter: {},
-            sortDesc: false,
-            page: 1,
-            itemsPerPage: 4,
-            sortBy: '',
-            keys: [
-                'name',
-                'date',
-                'tot_ratio',
-                'max_ratio',
-                'ind_cnt',
-                'int_price',
-                'cur_price',
+            mobileBreakpoint: 300,
+            headers: [
+                {
+                    text: 'Name',
+                    align: 'start',
+                    value: 'company_name',
+                },
+                { text: 'Code', value: 'jongmok_code' },
+                { text: 'Date', value: 'start_date' },
+                { text: 'Max', value: 'max_cir_ratio'},
+                { text: 'Total', value: 'tot_cir_ratio'},
+                { text: 'Cal', value: 'actions', sortable: false}
             ],
             theme_items: [
-            {
-                name: '남선알미늄',
-                date: '2020-02-01',
-                tot_ratio: 'aa',
-                max_ratio: '24',
-                ind_cnt: '4.0',
-                int_price: '87',
-                cur_price: '80',
-            },
-            {
-                name: '우리들휴브레인',
-                date: '2020-02-03',
-                tot_ratio: 'bb',
-                max_ratio: '74',
-                ind_cnt: '2.0',
-                int_price: '83',
-                cur_price: '81',
-            },
-            ]
+            ],
+            dialog5: false,
+            attrs: false,
         }
     },
     methods: {
+        go_to_first(data){
+            this.$store.commit('setStockInfo',{
+                item_code: data.jongmok_code,
+                item_name: data.company_name,
+                start_date: data.start_date,
+            })            
+            this.$router.push("/main/home");    
+        },        
         setTheme(themeIid){
             this.theme_id = themeIid;
         },
@@ -261,18 +195,16 @@ export default {
         },
         get_theme(){
             axios.get('/theme')
-            .then((result) =>{
-                console.log(result)
-                this.datas = result.data
+            .then((result) =>{                
+                this.datas = result.data                
             })
         },
         insert_theme(){
             var params = {}
             params.theme_name = this.theme_name
-            console.log(params)
             axios.post('/theme', params)
             .then(res => {
-                console.log(res)
+                console.log(res.status)
                 this.dialog = false;
                 this.get_theme();
             })
@@ -296,18 +228,20 @@ export default {
             console.log(params)
             axios.post('/themeItem', params)
             .then(res => {
-                console.log(res)
+                console.log(res.status)
+                
                 this.dialog2 = false;
                 this.get_items(this.theme_id);
                 this.item_name = ''
                 this.item_code = ''
+                
             })
         },
         update_diary(data){
             axios.put('/diary', data,                    
                 ).then(res => {
                     if(res){
-                        console.log(res)
+                        console.log(res.status)
                     }
                 })
         },
@@ -318,7 +252,7 @@ export default {
                 }}
             )
             .then(res => {
-                console.log(res)
+                console.log(res.status)
                 this.theme_id = ""
                 this.get_theme()
                 this.items = []
@@ -334,10 +268,40 @@ export default {
                 }}
             )
             .then(res => {
-                console.log(res)
+                console.log(res.status)
                 this.theme_item_code = ""
                 this.get_items(this.theme_id)
                 this.dialog4 = false
+            })
+        },
+        get_calc_result(){
+            axios.get('themeCalc',{
+                params: {
+                    theme_id: this.theme_id,
+                }
+            }).then(res => {
+                // vuex 에 저장
+                console.log(res.status)
+                this.theme_items = res.data
+                this.$store.commit('setThemeResult',{
+                          theme_result: res.data
+                        })
+            })
+        },
+        calc_theme_item(){
+            this.setDialog(true)
+            var params = {}
+            params.theme_id = this.theme_id
+            axios.post('/themeCalc', params)
+            .then(res => {
+                console.log(res.status)
+                this.get_calc_result()
+                this.setDialog(false)
+            })
+            .catch(error => {
+                console.log(error.request)
+                console.log(error.message)
+                this.setDialog(false)
             })
         },
         get_items(id){
@@ -358,7 +322,7 @@ export default {
                 }
             })
             .then((result) =>{
-                console.log(result)
+                console.log(result.status)
                 this.item_code = result.data
                 if( this.item_code != "" ){
                     this.item_change()
@@ -392,6 +356,9 @@ export default {
         updateItemsPerPage (number) {
             this.itemsPerPage = number
         },
+        setDialog(boolean){
+            this.dialog5 = boolean
+        }
     },    
     mounted() {
         this.get_theme()
@@ -399,7 +366,7 @@ export default {
                             pageName: '테마관리'
                         })
         // vuex 에 있는 조회결과값을 가져온다.
-        this.stats_result = this.$store.state.stats_result
+        this.theme_items = this.$store.state.theme_result  
     },
     computed: {
         numberOfPages () {
@@ -411,3 +378,8 @@ export default {
     },
 }
 </script>
+<style scoped>
+.v-progress-circular {
+  margin: 1rem;
+}
+</style>

@@ -1,5 +1,13 @@
 <template>
     <v-container>
+        <v-dialog v-model="dialog" persistent max-width="290">
+            <div class="text-center">
+                <v-progress-linear
+                    indeterminate
+                    color="green"
+                ></v-progress-linear>
+            </div>
+        </v-dialog>         
         <v-row>
             <v-col cols="8" style="height: 50px;">
                 <v-text-field 
@@ -69,14 +77,20 @@ export default {
                 { text: 'Cal', value: 'actions', sortable: false}
             ],
             stats_result: [],
+            dialog: false,
         }
     },
     methods:{
+        setDialog(boolean){
+            this.dialog = boolean
+        },        
         get_statistic(){
             if( this.tr_date == "" ){
                 alert("배치일자는 입력합시다")
                 return
             }
+
+            this.setDialog(true)
             axios.get('/stats',{
                 params: {
                     item: this.item_code,
@@ -91,7 +105,12 @@ export default {
                           stats_result: result.data
                         }),
                 this.stats_result = result.data
+                this.setDialog(false)
             }))
+            .catch(error => {
+                console.log(error.message)
+                this.setDialog(false)
+            })
         },
         item_name_change(){
             axios.get('/item/code',{
@@ -145,6 +164,21 @@ export default {
                         })
         // vuex 에 있는 조회결과값을 가져온다.
         this.stats_result = this.$store.state.stats_result
+
+        var date = new Date();
+        var year = date.getFullYear(); 
+        var month = new String(date.getMonth()+1); 
+        var day = new String(date.getDate()); 
+
+        // 한자리수일 경우 0을 채워준다. 
+        if(month.length == 1){ 
+            month = "0" + month; 
+        } 
+        if(day.length == 1){ 
+            day = "0" + day; 
+        } 
+        //alert(date)
+        this.tr_date = year + "" + month + "" + day;
     },
     computed: {
         numberOfPages () {

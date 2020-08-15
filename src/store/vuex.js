@@ -20,6 +20,8 @@ export const store = new Vuex.Store({
         start_date: '',
       },
       stats_result: [],
+      diary_result: [],
+      theme_result: [],
     },
     mutations: {
       setCustomer: function(state, payload){        
@@ -52,9 +54,14 @@ export const store = new Vuex.Store({
         state.pageName = payload.pageName
       },
       setStatResult: function(state, payload){
-        console.log("setStatResult : " + payload.stats_result[0].company_name)
         state.stats_result = payload.stats_result
-      }
+      },
+      setDiaryResult: function(state, payload){
+        state.diary_result = payload.diary_result
+      },
+      setThemeResult: function(state, payload){
+        state.theme_result = payload.theme_result
+      },
     }
   })
 

@@ -1,6 +1,14 @@
 <template>
     <div class="home">
         <v-container>
+            <v-dialog v-model="dialog" persistent max-width="290">
+                <div class="text-center">
+                    <v-progress-linear
+                        indeterminate
+                        color="green"
+                    ></v-progress-linear>
+                </div>
+            </v-dialog>            
             <v-row style="height: 50px;">
                 <v-col xs6 sm4 md3>
                     <v-text-field
@@ -258,10 +266,15 @@ export default{
             news_score: 0,
             fin_score: 0,
             total_score: 0,
+            dialog: false,
         }
     },
     methods: {
+        setDialog(boolean){
+            this.dialog = boolean
+        },
         getInfo(){
+            this.setDialog(true)
             axios.get('/unitPrice',{
                 params: {
                     item_code: this.item_code,
@@ -280,7 +293,11 @@ export default{
                 for( var i = 0 ; i < this.data.datas.length ; i++ ){
                     this.data.datas[i].pre_value = this.data.pre_datas[i].value
                 }
-                
+                this.setDialog(false)
+            })
+            .catch(error =>{
+                console.log(error.message)
+                this.setDialog(false)
             })
         },
         getCompInfo(){

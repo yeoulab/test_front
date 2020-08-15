@@ -1,10 +1,13 @@
 <template>
     <v-container>
-        <!--
-        <v-btn icon small @click="getGlobalIndex">
-            <v-icon>mdi-owl</v-icon>
-        </v-btn>
-        -->
+        <v-dialog v-model="dialog" persistent max-width="290">
+            <div class="text-center">
+                <v-progress-linear
+                    indeterminate
+                    color="green"
+                ></v-progress-linear>
+            </div>
+        </v-dialog>
         <v-card title>
             <v-simple-table dense v-if="this.datas">
                 <template v-slot:default>
@@ -41,15 +44,24 @@ export default {
     data(){
         return{
             datas: [],
+            dialog: false,
         }
     },
-    methods:{
+    methods:{        
+        setDialog(boolean){
+            this.dialog = boolean
+        },  
         getGlobalIndex(){
+            this.setDialog(true)
             axios.get('/global/index')
             .then((res) =>{
-                console.log(res.data)
-                
+                console.log(res.status)
                 this.datas = res.data
+                this.setDialog(false)
+            })
+            .catch(error => {
+                console.log(error.message)
+                this.setDialog(false)
             })
         }
     },

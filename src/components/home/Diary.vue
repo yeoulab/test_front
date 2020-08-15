@@ -1,5 +1,13 @@
 <template>
     <v-container>
+        <v-dialog v-model="dialog2" persistent max-width="290">
+            <div class="text-center">
+                <v-progress-linear
+                    indeterminate
+                    color="green"
+                ></v-progress-linear>
+            </div>
+        </v-dialog>
         <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -62,8 +70,15 @@
                     </v-card>
                 </v-dialog>
                 <!-- </v-toolbar> -->
-                </template>
-                <template v-slot:item.actions="{ item }">
+            </template>
+            <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="go_to_first(item)"
+                >
+                    mdi-diamond-stone
+                </v-icon>
                 <v-icon
                     small
                     class="mr-2"
@@ -115,14 +130,26 @@
                     { text: '시작일자', value: 'start_date' },
                     { text: 'Actions', value: 'actions', sortable: false}
                 ],
+                dialog2: false,
             }
         },
         methods: {
+            setDialog2(boolean){
+                this.dialog2 = boolean
+            },
             get_diary(){
+                this.setDialog2(true)
                 axios.get('/diary')
                 .then((result) =>{
-                    console.log(result)
                     this.datas = result.data
+                    this.$store.commit('setDiaryResult',{
+                          diary_result: result.data
+                        })
+                    this.setDialog2(false)
+                })
+                .catch(error => {
+                    console.log(error.message)
+                    this.setDialog2(false)
                 })
             },
             update_diary(data){
@@ -147,7 +174,6 @@
                 this.dialog = true
             },
             deleteItem(data){
-                //const index = this.datas.indexOf(data)
                 this.editedItem = Object.assign({}, data)
                 confirm("정말 삭제하시겠습니까?") &&
                 axios.delete('/diary',{
@@ -166,7 +192,13 @@
             this.$store.commit('setPageName',{
                             pageName: '드아이어리'
                             })
-            this.get_diary()    
+            
+            //this.get_diary()
+            this.datas = this.$store.state.diary_result
+
+            if( this.datas == '' ){
+                this.get_diary()
+            }
         },
         watch: {
             dialog (val) {
