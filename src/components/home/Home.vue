@@ -312,6 +312,7 @@ export default{
             window.open(new_link, "");
         },
         insert_diary(){
+            this.setDialog(true)
             var params = {}
             params.jongmok_code = this.item_code
             params.start_date = this.start_date
@@ -320,7 +321,15 @@ export default{
             console.log(params)
             axios.post('/diary', params)
             .then(res => {
-                console.log(res)
+                console.log(res.status)
+                this.setDialog(false)
+                this.$store.commit('setDiaryResult',{
+                    diary_result: []
+                })
+            })
+            .catch(error =>{
+                console.log(error.message)
+                this.setDialog(false)
             })
         },
         item_name_change(){

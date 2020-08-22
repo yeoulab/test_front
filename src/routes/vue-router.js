@@ -9,6 +9,7 @@ import Index from '../components/home/Index'
 import Diary from '../components/home/Diary'
 import Stats from '../components/home/Stats'
 import Theme from '../components/home/Theme'
+import Company from '../components/home/Company'
 
 //import MyInfo from '../components/my/MyInfo'
 //import Login from '../components/my/Login'
@@ -39,6 +40,9 @@ export default new Router({
             }, {
                 path: 'theme',
                 component: Theme,
+            }, {
+                path: 'company',
+                component: Company,
             }]
         },
         {path: '/', component: Door},
