@@ -37,7 +37,7 @@ export default {
           {btnName: 'mdi-file-document-edit', text: '다이어리', route: '/main/diary'},
           {btnName: 'mdi-clipboard-list-outline', text: '통계', route: '/main/stats'},
           {btnName: 'mdi-chart-gantt', text: '테마관리', route: '/main/theme'},
-          {btnName: 'mdi-city-variant', text: '테마관리', route: '/main/company'},
+          //{btnName: 'mdi-city-variant', text: '테마관리', route: '/main/company'},
           //{btnName: 'mdi-account', text: '', route: '/myInfo'},
         ]
       }
