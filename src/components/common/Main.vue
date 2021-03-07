@@ -5,9 +5,9 @@
         <router-view></router-view>
         </v-content>    
         <v-footer app>      
-        <v-bottom-navigation app grow
+        <v-bottom-navigation app shift dark
             :value="activeBtn"
-            color="indigo darken-2"
+            color="purple"
         >
             <v-btn
             v-for="link in links"

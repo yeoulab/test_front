@@ -1,5 +1,13 @@
 <template>
     <v-container>
+        <v-dialog v-model="dialog" persistent max-width="290">
+            <div class="text-center">
+                <v-progress-linear
+                    indeterminate
+                    color="green"
+                ></v-progress-linear>
+            </div>
+        </v-dialog>
         <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -49,19 +57,26 @@
                     { text: '현재가', value: 'cur_price'},
                     { text: 'per', align: 'start', value: 'per'}
                 ],
+                dialog: false,
             }
         },
         methods: {
+            setDialog(boolean){
+                this.dialog = boolean
+            },            
             get_coin(){
+                this.setDialog(true)
                 axios.get('/coin')
                 .then((result) =>{
                     this.datas = result.data
                     this.$store.commit('setCoinResult',{
                           coin_result: result.data
                         })
+                    this.setDialog(false)
                 })
                 .catch(error => {
                     console.log(error.message)
+                    this.setDialog(false)
                 })
             },
         },
@@ -76,12 +91,7 @@
             if( this.datas == '' ){
                 this.get_coin()
             }
-        },
-        watch: {
-            dialog (val) {
-                val || this.close()
-            },
-        },        
+        },       
     }
 </script>
 <style> 

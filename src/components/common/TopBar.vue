@@ -1,6 +1,7 @@
 <template>
     <nav>
-        <v-app-bar flat app dense color="gray"><!--class="grey lighten-5" >-->
+        <v-app-bar flat app dense color="light-purple" 
+        src="https://picsum.photos/id/130/1920/1080"><!--130, 186-->
             <v-toolbar-title class="font-weight-bold black--text ml-2">{{ this.$store.state.pageName }}</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-text-field 
@@ -24,6 +25,17 @@
                     <v-icon>mdi-close</v-icon>
                 </v-btn>
             </div>
+            <!-- <template v-slot:extension>
+                <v-tabs align-with-title>
+                    <v-tab>
+                        <v-btn @click="callSearch" icon small>
+                            <v-icon>mdi-magnify</v-icon>
+                        </v-btn>
+                    </v-tab>
+                    <v-tab>Tab 2</v-tab>
+                    <v-tab>Tab 3</v-tab>
+                </v-tabs>
+            </template> -->
         </v-app-bar>
     </nav>
 </template>
