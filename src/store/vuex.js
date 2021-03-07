@@ -22,6 +22,7 @@ export const store = new Vuex.Store({
       stats_result: [],
       diary_result: [],
       theme_result: [],
+      coin_result: [],
     },
     mutations: {
       setCustomer: function(state, payload){        
@@ -47,7 +48,7 @@ export const store = new Vuex.Store({
         state.customer.phone = ""
         state.customer.name = ""
       },
-      increment (state, value) {
+      increment (state, value) { 
         state.count += value
       },
       setPageName(state, payload){
@@ -62,6 +63,9 @@ export const store = new Vuex.Store({
       setThemeResult: function(state, payload){
         state.theme_result = payload.theme_result
       },
+      setCoinResult: function(state, payload){
+        state.coin_result = payload.coin_result
+      }
     }
   })
 

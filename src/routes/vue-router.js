@@ -7,9 +7,10 @@ import Router from 'vue-router'
 import Home from '../components/home/Home'
 import Index from '../components/home/Index'
 import Diary from '../components/home/Diary'
-import Stats from '../components/home/Stats'
+import Stats from '../components/home/Stats' 
 import Theme from '../components/home/Theme'
 import Company from '../components/home/Company'
+import Coin from '../components/home/Coin'
 
 //import MyInfo from '../components/my/MyInfo'
 //import Login from '../components/my/Login'
@@ -43,6 +44,9 @@ export default new Router({
             }, {
                 path: 'company',
                 component: Company,
+            }, {
+                path: 'coin',
+                component: Coin
             }]
         },
         {path: '/', component: Door},
